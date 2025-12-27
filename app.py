@@ -14,10 +14,13 @@ def home():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    receiver = request.form['email']
-    message = request.form['message']
-
     try:
+        print("USER:", EMAIL_ADDRESS)
+        print("PASS SET:", EMAIL_PASSWORD is not None)
+
+        receiver = request.form['email']
+        message = request.form['message']
+
         msg = EmailMessage()
         msg['Subject'] = "Reminder"
         msg['From'] = EMAIL_ADDRESS
