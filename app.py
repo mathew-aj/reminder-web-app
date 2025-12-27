@@ -27,7 +27,7 @@ def submit():
         msg['To'] = receiver
         msg.set_content(message)
 
-        with smtplib.SMTP('smtp.gmail.com', 587, timeout=10) as server:
+        with smtplib.SMTP('smtp.gmail.com', 465, timeout=10) as server:
             server.starttls()
             server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
             server.send_message(msg)
