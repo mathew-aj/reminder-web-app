@@ -13,25 +13,24 @@ def home():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    name = request.form['name']
-    user_email = request.form['email']
-    message = request.form['message']
+    try:
+        receiver = request.form['email']
+        message = request.form['message']
 
-    msg = EmailMessage()
-    msg['Subject'] = "New Reminder Notification"
-    msg['From'] = EMAIL_ADDRESS
-    msg['To'] = EMAIL_ADDRESS   # unakku varanum na same mail
-    msg.set_content(
-        f"Name: {name}\n"
-        f"User Email: {user_email}\n"
-        f"Message: {message}"
-    )
+        msg = Message(
+            "Reminder",
+            sender=os.environ.get("EMAIL_USER"),
+            recipients=[receiver]
+        )
+        msg.body = message
 
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-        smtp.send_message(msg)
+        mail.send(msg)
 
-    return "Email notification sent successfully!"
+        return "Email sent successfully ✅"
+
+    except Exception as e:
+        print("EMAIL ERROR:", e)
+        return "Email failed ❌", 500
 
 if __name__ == '__main__':
     app.run(debug=True)
