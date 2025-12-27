@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 EMAIL_ADDRESS = os.environ.get("mm8032155@gmail.com")
-EMAIL_PASSWORD = os.environ.get("jwuccytdhjkqroj")
+EMAIL_PASSWORD = os.environ.get("jwuccytdhjkoqroj")
 
 @app.route('/')
 def home():
