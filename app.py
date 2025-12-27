@@ -14,17 +14,17 @@ def home():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    try:
-        receiver = request.form['email']
-        message = request.form['message']
+    receiver = request.form['email']
+    message = request.form['message']
 
+    try:
         msg = EmailMessage()
         msg['Subject'] = "Reminder"
         msg['From'] = EMAIL_ADDRESS
         msg['To'] = receiver
         msg.set_content(message)
 
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+        with smtplib.SMTP('smtp.gmail.com', 587, timeout=10) as server:
             server.starttls()
             server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
             server.send_message(msg)
@@ -33,7 +33,7 @@ def submit():
 
     except Exception as e:
         print("EMAIL ERROR:", e)
-        return "Email failed ❌", 500
+        return "Email failed ❌"
 
 if __name__ == '__main__':
     app.run()
