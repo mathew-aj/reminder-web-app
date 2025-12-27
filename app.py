@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request
 import smtplib
 from email.message import EmailMessage
+import os
 
 app = Flask(__name__)
 
-EMAIL_ADDRESS = "mm8032155@gmail.com"      # un gmail
-EMAIL_PASSWORD = "jwuc cytd hjko qroj"      # app password
+EMAIL_ADDRESS = os.environ.get("mm8032155@gmail.com")
+EMAIL_PASSWORD = os.environ.get("jwuccytdhjkqroj")
 
 @app.route('/')
 def home():
@@ -17,14 +18,16 @@ def submit():
         receiver = request.form['email']
         message = request.form['message']
 
-        msg = Message(
-            "Reminder",
-            sender=os.environ.get("EMAIL_USER"),
-            recipients=[receiver]
-        )
-        msg.body = message
+        msg = EmailMessage()
+        msg['Subject'] = "Reminder"
+        msg['From'] = EMAIL_ADDRESS
+        msg['To'] = receiver
+        msg.set_content(message)
 
-        mail.send(msg)
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()
+            server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            server.send_message(msg)
 
         return "Email sent successfully ✅"
 
@@ -33,4 +36,4 @@ def submit():
         return "Email failed ❌", 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
