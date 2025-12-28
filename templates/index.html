@@ -1,19 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Email Notification Project</title>
-</head>
-<body>
-    <h2>Email Reminder Form</h2>
+    <title>Reminder App</title>
 
-    <form action="/submit" method="post">
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+    <script>
+        (function(){
+            emailjs.init("FgblwsP-yakkX5Sn3");   // 🔑 Public Key
+        })();
+    </script>
+</head>
+
+<body>
+    <h2>Email Reminder</h2>
+
+    <form id="reminderForm">
         <input type="text" name="name" placeholder="Your Name" required><br><br>
 
         <input type="email" name="email" placeholder="Your Email" required><br><br>
 
-        <textarea name="message" placeholder="Reminder Message" required></textarea><br><br>
+        <textarea name="message" placeholder="Reminder message" required></textarea><br><br>
 
         <button type="submit">Send Reminder</button>
     </form>
+
+    <p id="status"></p>
+
+    <script>
+        document.getElementById("reminderForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            emailjs.sendForm(
+                "service_wdiiwpr",      // ✅ Service ID
+                "template_inzcg4w",     // ✅ Template ID
+                this
+            ).then(
+                function() {
+                    document.getElementById("status").innerHTML = "Email sent successfully ✅";
+                },
+                function(error) {
+                    document.getElementById("status").innerHTML = "Email failed ❌";
+                    console.log(error);
+                }
+            );
+        });
+    </script>
 </body>
 </html>
